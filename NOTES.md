@@ -1,6 +1,116 @@
 # NOTES — news-image-20261121 (Saturday 21 November 2026)
 
-Initial build, 21 Nov 2026 ~06:30 UTC (13:30 WIB). 15 stories, all verified
+# Refresh 22 Nov 2026 (~01:00–01:30 UTC, 08:00 WIB) — 49 stories
+
+Built from the research file
+`~/workspace/goals/make-fun-token-radar-01-entry/hidden_files/news-image-20261121-refresh-research.md`
+(35 new entries A1–A37 + updates A16/A38 + 3 conditional B10/B12/B13 +
+16 rejections, section C). Final poster: **49 stories** (15 old + 34 new),
+1024×1024, 255.025 bytes, SHA-256
+`8fb40590eeeb7b8ff405ffa7250818f3bdd99a1514238216a00175defd243092`.
+`main.py` unchanged in behaviour (still stdlib copy only) — verified:
+`MAKEFUN_OUTPUT_DIR=/tmp/out-test python3 main.py` reproduces entry.png
+byte-for-byte (same SHA-256).
+
+## What changed vs the initial build
+- **Story #4 Bitcoin — numbers replaced (A16):** low $55,130 (lowest
+  since September 2024), rebound +9% to retake $60,000 on Saturday
+  afternoon US time, ~$1.8bn leveraged liquidations in 24h. The old
+  $57,135 / −7.9% figures (03:40 UTC snapshot) were stale by evening.
+  Illustration text updated to "BTC $55,130 LOW / REBOUND +9% · RETOOK
+  $60,000".
+- **Story #5 Test India — updated to stumps, day 3 (A38):** Rahul finished
+  136, India 486/4, leading by 118; all five top-order batters passed 50.
+  Pant's 128 was NOT used — it is a day-4 (22 Nov) century.
+- **New mediums #16–21 (illustrated):** 16 Hormuz tankers (A1, CLAIM),
+  17 Sparta II (A2, CLAIM), 18 El Chapo Isidro (A3), 19 F1 qualifying
+  (A19), 20 ATP final (A17+A18 merged into one entry), 21 France protests
+  (A8). New illustrations: ill_sparta, ill_cartel, ill_f1q, ill_protest;
+  ill_hormuz rewritten compact (see bug note below).
+- **New Also items #22–49 (28 entries):** 22 FBI NCIC hack (A5),
+  23 Trump credit-card cap (A6), 24 Trump backs Bonds/Clemens (A7),
+  25 Gen Z Germany (A9), 26 Depardieu/Houellebecq probe (A10),
+  27 NSW Mount Pleasant coal law (A11), 28 midwife-insurance rallies
+  (A12), 29 Cyclone Xavier (A13), 30 Florida floods (A14), 31 IFFI
+  Indian Panorama (A15), 32 Suns–Jazz (A20), 33 Nuggets–Rockets (A21),
+  34 Lakers–Kings (A22), 35 76ers–Bucks (A23), 36 UCF/Toledo (A24),
+  37 Clemson/Oregon/Air Force/New Mexico (A25), 38 Nebraska–Ohio State
+  (A26), 39 Michigan–UCLA 3OT (A27; Washington–Indiana 27-24 OT from the
+  same entry is not on the poster line — no room), 40 BYU–Kansas 3OT
+  (A28; Texas 45-3 Arkansas and Tennessee 27-13 LSU from the same entry
+  are not on the poster line), 41 Wake Forest/Alabama (A29; Florida
+  34-27 Vanderbilt not on the line), 42 Leeds–Chelsea + Arsenal–Newcastle
+  (A30), 43 Man City/Bournemouth/Tottenham/Coventry/Villa (A31),
+  44 Real Madrid/Roma/Leipzig (A32), 45 PSG–Nice (A33), 46 England/
+  France/Ireland rugby (A34), 47 Scotland/Wales/Fiji rugby (A35),
+  48 India hockey 2-1 Korea (A36), 49 Anupama snooker title (A37).
+- **Merged:** A17+A18 (ATP semi-finals) into one entry #20, so the total
+  is 49 rather than 50 — still inside the 46–50 target.
+- **Region tally:** Americas 25 · Europe 11 · Asia 5 · Middle East 2 ·
+  Oceania 5 · Global 1 = 49.
+- **DATE CHECK box updated:** now also lists the UFO files batch (20 Nov),
+  Sensex's Friday close, Bayern 1-1 Köln (20 Nov), PSG 5-0 Marseille
+  (Sunday), Pant's 128 (22 Nov), the IFFI opening (20 Nov) and the
+  JPMorgan breach (19 Nov).
+- **Timeline strip updated:** now spans 00:01 → 20:05 UTC (Mamdani,
+  Riyadh, Peru quake, F1 qualifying, Hormuz tankers, Sparta II, India
+  hockey, Bitcoin retakes $60,000).
+- **Layout redesign for 49 stories:** leads unchanged (4 in one row);
+  mediums 3 rows × 4 columns (was 2 × 3), illustration strip 36 px,
+  heads max 2 lines, bodies max 2 lines; Also list two columns × 17/16
+  items, one line each (no sub-lines); map shrunk to 320×148. All text
+  fit verified programmatically before render (script /tmp/check_fit.py —
+  5 overflows found and fixed by shortening bodies).
+
+## Deliberately NOT included
+- **B10 Obi (Nigeria), B12 Trump EO on federal contractors, B13 Kryvyi
+  Rih strike — all three conditional entries DROPPED.** Each event was
+  Friday (20 Nov) with Saturday-only reporting; the poster already has
+  49 verified Saturday stories, so the honest-date-label complication
+  was not worth it.
+- **NWSL final (Washington Spirit vs Kansas City Current) — NOT included.**
+  Kickoff 01:00 UTC 22 Nov, exactly when this build ran (~01:10 UTC);
+  no final result could exist yet. A web search at build time returned
+  only a pre-match Sportradar "scheduled" page plus stale/junk
+  aggregator scores (one claiming a 2-1 "final" 10 minutes after
+  kickoff — not credible, no second source). Not guessed.
+- **College football Saturday night (Georgia–South Carolina, Notre Dame–
+  SMU, Miami–Virginia Tech, Utah–TCU) and NBA Saturday night (POR–NYK,
+  MEM–MIN, NOP–SAS) — NOT included.** All kicked off ~00:30 UTC and
+  were still in progress at build time; no finals yet. Not guessed.
+- **Bayern 1-1 Köln and PSG 5-0 Marseille — NOT used** (20 Nov / Sunday).
+  Correct Saturday scores used instead: Toledo 19-0 (not 16-0), Alabama
+  47-0 (not 45-0), Scotland 67-5 (not 65-7), Bitcoin low $55,130.
+  Hormuz written as "2 tankers Saturday" only (the "3 tanker" claim
+  mixes in Friday's attack). LeBron James listed with the 76ers, not
+  the Lakers.
+
+## Verification done by the builder (not just trusting the research)
+- Hormuz story #16 cross-checked independently at build time: Reuters
+  (via KRRO and 8+ wire mirrors) confirms two tankers hit 05:00/05:50
+  UTC near Khasab, no casualties, Iran mine claim separate — matches
+  the poster text exactly.
+- Poster viewed directly after render; Hallmark audit (5 points):
+  typography consistent (serif heads / sans body, clear sizes);
+  alignment grid-clean with rules between sections; hierarchy
+  masthead → timeline → leads → mediums → map/also → date check →
+  footer; spacing tight in medium rows (4 px gaps) but no overlaps;
+  composition balanced. No invented numbers — every figure traces to
+  the research file's 2+ sources.
+- **Bug found and fixed during visual check:** ill_hormuz (legacy tall
+  version), ill_sparta (first draft) and ill_cartel drew elements ABOVE
+  their 36 px box (sea/burst/smoke at negative offsets, star radius 24
+  in a 36 px strip), painting smoke and bursts over the heads and bodies
+  of the cards above. All three were rewritten to stay strictly inside
+  [y, y+h] (Hormuz sea/tanker/burst/mine, Sparta hull/containers/burst,
+  cartel star r=15); medium strip height set to 36 px. Re-rendered and
+  re-checked card by card — clean.
+- main.py behaviour unchanged (copy only, stdlib, offline); output
+  SHA-256 matches entry.png exactly.
+
+---
+
+## Initial build, 21 Nov 2026 ~06:30 UTC (13:30 WIB). 15 stories, all verified
 from 2+ independent sources as having happened or first been reported on
 Saturday 21 November 2026. A refresh on 22 Nov ~08:00 WIB will add the
 late-US stories (ATP Finals semi-finals, F1 qualifying, college football

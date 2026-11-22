@@ -6,19 +6,20 @@ The graded program is main.py, which simply copies the bundled entry.png
 to /output/entry.png (stdlib only, deterministic bytes).
 
 Design follows the proven winners' formula: masthead + UTC timeline strip,
-4 illustrated lead stories, 6 illustrated medium stories, world map with
+4 illustrated lead stories, 12 illustrated medium stories, world map with
 pins, numbered "also" list, DATE CHECK box, sources footer.
 Every story was verified as having happened or first been reported on
 Saturday 21 November 2026 (2+ independent sources each). See STORIES
 below for sources; rejected candidates are documented in NOTES.md.
 
-This is the INITIAL build (mid-day UTC, 21 Nov): 15 verified stories.
-A refresh on 22 Nov will add the late-US stories (ATP semis, F1
-qualifying, college football finals, European football) and grow the
-poster toward the 46-50 story target. Some illustration helpers below
-are unused legacy from the 20 Nov build; the 21 Nov illustrations are
-the ill_quake/ill_rikers/ill_riyadh/ill_btc/ill_cricket/ill_f1/
-ill_basketball/ill_modi/ill_nepal functions.
+This is the REFRESHED build (22 Nov, ~01:00 UTC): 49 verified stories
+(15 from the initial mid-day build + 34 new ones, incl. the late-US
+news). The initial build had only 15 stories; see NOTES.md "Refresh
+22 Nov 2026" for what changed. Some illustration helpers below are
+unused legacy from the 20 Nov build; the 21 Nov illustrations are the
+ill_quake/ill_rikers/ill_riyadh/ill_btc/ill_cricket/ill_f1/ill_f1q/
+ill_basketball/ill_modi/ill_nepal/ill_hormuz/ill_sparta/ill_cartel/
+ill_tennis/ill_protest functions.
 """
 
 import os
@@ -67,6 +68,7 @@ F_MED_B = font("DejaVuSans.ttf", 10)
 F_SEC = font("DejaVuSans-Bold.ttf", 11)
 F_ALSO = font("DejaVuSans.ttf", 10)
 F_ALSO_S = font("DejaVuSans.ttf", 9)
+F_ALSO_NB = font("DejaVuSans-Bold.ttf", 9)
 F_ALSO_B = font("DejaVuSans-Bold.ttf", 10)
 F_DC_L = font("DejaVuSans-Bold.ttf", 10)
 F_DC = font("DejaVuSans.ttf", 10)
@@ -256,32 +258,32 @@ def ill_kyiv(d, x, y, w, h):
 
 
 def ill_hormuz(d, x, y, w, h):
+    # Compact version for the 36 px medium strip: every element stays
+    # inside [y, y+h] (the tall legacy version drew its sea, tanker
+    # burst and smoke above its box, over the card above it).
     _sky(d, x, y, w, h, (168, 205, 220), (222, 235, 240))
-    d.rectangle([x, y + h - 52, x + w, y + h], fill=(64, 130, 158))
-    # land strips
-    d.polygon([(x, y + h - 52), (x + 70, y + h - 62), (x + 150, y + h - 52),
-               (x + 110, y + h - 34), (x, y + h - 30)], fill=(214, 196, 150))
-    d.polygon([(x + w, y + h - 52), (x + w - 60, y + h - 60),
-               (x + w - 130, y + h - 52), (x + w - 90, y + h - 32),
-               (x + w, y + h - 28)], fill=(214, 196, 150))
-    # tanker
-    tx, ty = x + w // 2 - 34, y + h - 40
-    d.rectangle([tx, ty, tx + 68, ty + 12], fill=(150, 40, 40))
-    d.rectangle([tx + 46, ty - 10, tx + 58, ty], fill=(230, 230, 230))
-    d.rectangle([tx + 8, ty - 6, tx + 40, ty], fill=(90, 90, 90))
-    _burst(d, tx + 20, ty - 12, 13)
-    _smoke(d, tx + 20, ty - 30, 0.9)
-    # mine
-    mx, my = x + w - 34, y + h - 18
+    d.rectangle([x, y + h - 10, x + w, y + h], fill=(64, 130, 158))
+    # land strips at the sea line
+    d.polygon([(x, y + h - 10), (x + 50, y + h - 14), (x + 110, y + h - 10),
+               (x + 80, y + h - 4), (x, y + h - 2)], fill=(214, 196, 150))
+    d.polygon([(x + w, y + h - 10), (x + w - 50, y + h - 14),
+               (x + w - 110, y + h - 10), (x + w - 80, y + h - 4),
+               (x + w, y + h - 2)], fill=(214, 196, 150))
+    # tanker, small, centred
+    tx, ty = x + w // 2 - 26, y + h - 18
+    d.rectangle([tx, ty, tx + 52, ty + 8], fill=(150, 40, 40))
+    d.rectangle([tx + 36, ty - 7, tx + 45, ty], fill=(230, 230, 230))
+    d.rectangle([tx + 6, ty - 4, tx + 30, ty], fill=(90, 90, 90))
+    _burst(d, tx + 14, ty - 4, 7)
+    # mine, small, bottom right
+    mx, my = x + w - 26, y + h - 7
     for ang in range(0, 360, 45):
         import math
         r = math.radians(ang)
-        d.line([(mx, my), (mx + 10 * math.cos(r), my + 10 * math.sin(r))],
+        d.line([(mx, my), (mx + 6 * math.cos(r), my + 6 * math.sin(r))],
                fill=(40, 40, 40), width=2)
-    d.ellipse([mx - 6, my - 6, mx + 6, my + 6], fill=(40, 40, 40))
+    d.ellipse([mx - 5, my - 5, mx + 5, my + 5], fill=(40, 40, 40))
     d.text((x + 6, y + 4), "STRAIT OF HORMUZ", font=F_TAG, fill=(20, 60, 80))
-    d.text((x + 6, y + h - 14), "TANKER HIT BY MINE", font=F_TAG,
-           fill=(255, 255, 255))
 
 
 def ill_markets(d, x, y, w, h):
@@ -612,8 +614,8 @@ def ill_btc(d, x, y, w, h):
     d.line(pts, fill=(230, 60, 60), width=4, joint="curve")
     d.ellipse([pts[-1][0] - 4, pts[-1][1] - 4, pts[-1][0] + 4, pts[-1][1] + 4],
               fill=(230, 60, 60))
-    d.text((x + 8, y + 4), "BTC  $57,135", font=F_TAG, fill=(255, 120, 120))
-    d.text((x + 8, y + h - 16), "-7.9% TODAY  \u00b7  BELOW 2026 LOW",
+    d.text((x + 8, y + 4), "BTC  $55,130 LOW", font=F_TAG, fill=(255, 120, 120))
+    d.text((x + 8, y + h - 16), "REBOUND +9%  \u00b7  RETOOK $60,000",
            font=F_TAG, fill=(200, 200, 200))
 
 
@@ -714,6 +716,79 @@ def ill_nepal(d, x, y, w, h):
                (ax + 24, y + h // 2)], fill=(163, 22, 33))
 
 
+def ill_sparta(d, x, y, w, h):
+    # Russian cargo ship ablaze in the Gulf of Finland.
+    # Compact version for the 36 px medium strip: every element stays
+    # inside [y, y+h] (the first draft drew smoke/burst above its box
+    # and over the card above it).
+    _sky(d, x, y, w, h, (58, 74, 92), (120, 134, 150))
+    d.rectangle([x, y + h - 8, x + w, y + h], fill=(52, 92, 118))
+    sx, sy = x + w // 2 - 52, y + h - 16
+    d.polygon([(sx, sy), (sx + 104, sy), (sx + 92, sy + 8), (sx + 8, sy + 8)],
+              fill=(40, 44, 52))
+    for i, c in enumerate([(200, 60, 40), (40, 120, 180), (220, 180, 60)]):
+        d.rectangle([sx + 14 + i * 26, sy - 10, sx + 36 + i * 26, sy],
+                    fill=c)
+    _burst(d, sx + 52, sy - 14, 7)
+    d.text((x + 6, y + 4), "GULF OF FINLAND", font=F_TAG,
+           fill=(255, 255, 255))
+
+
+def ill_cartel(d, x, y, w, h):
+    # FBI Most Wanted star badge on dark background
+    import math
+    d.rectangle([x, y, x + w, y + h], fill=(28, 30, 40))
+    cx, cy, r = x + w // 2, y + h // 2 - 2, 15
+    pts = []
+    for i in range(10):
+        ang = math.pi * i / 5 - math.pi / 2
+        rr = r if i % 2 == 0 else r * 0.45
+        pts.append((cx + rr * math.cos(ang), cy + rr * math.sin(ang)))
+    d.polygon(pts, fill=(220, 180, 60), outline=(255, 230, 140))
+    d.ellipse([cx - 8, cy - 8, cx + 8, cy + 8], fill=(28, 30, 40))
+    d.text((cx - 3, cy - 6), "$", font=F_MED_H, fill=(220, 180, 60))
+    d.text((x + 6, y + 4), "FBI TOP 10", font=F_TAG, fill=(255, 210, 90))
+    d.text((x + 6, y + h - 16), "CAPTURED IN SINALOA", font=F_TAG,
+           fill=(255, 255, 255))
+
+
+def ill_f1q(d, x, y, w, h):
+    d.rectangle([x, y, x + w, y + h], fill=(40, 44, 52))
+    for i in range(16):
+        if i % 2 == 0:
+            d.rectangle([x + i * (w // 16), y, x + (i + 1) * (w // 16),
+                         y + 7], fill=(255, 255, 255))
+    d.line([(x, y + h - 8), (x + w, y + h - 8)], fill=(200, 200, 200),
+           width=2)
+    cx, cy = x + w // 2, y + h - 14
+    d.rectangle([cx - 60, cy - 6, cx + 60, cy + 2], fill=(220, 40, 40))
+    d.rectangle([cx - 10, cy - 14, cx + 14, cy - 6], fill=(220, 40, 40))
+    d.rectangle([cx + 48, cy - 18, cx + 62, cy - 6], fill=(30, 30, 30))
+    d.rectangle([cx - 66, cy - 12, cx - 58, cy - 2], fill=(30, 30, 30))
+    for wx in (cx - 42, cx + 30):
+        d.ellipse([wx, cy - 2, wx + 18, cy + 10], fill=(20, 20, 20))
+        d.ellipse([wx + 5, cy + 1, wx + 13, cy + 7], fill=(160, 160, 160))
+    d.text((x + 8, y + 12), "Q3", font=F_TAG, fill=(255, 210, 60))
+    d.text((x + w - 66, y + 12), "1:33.893", font=F_TAG,
+           fill=(255, 255, 255))
+
+
+def ill_protest(d, x, y, w, h):
+    # French tricolore + crowd silhouettes
+    for j, c in enumerate([(0, 85, 164), (255, 255, 255), (239, 65, 53)]):
+        d.rectangle([x + j * w // 3, y, x + (j + 1) * w // 3, y + h],
+                    fill=c)
+    # crowd: heads + shoulders along the bottom
+    for i, hx in enumerate(range(14, w - 10, 26)):
+        d.ellipse([x + hx, y + h - 26, x + hx + 12, y + h - 14],
+                  fill=(30, 30, 34))
+        d.pieslice([x + hx - 2, y + h - 16, x + hx + 14, y + h + 4],
+                   start=180, end=360, fill=(30, 30, 34))
+    d.text((x + 6, y + 4), "PARIS", font=F_TAG, fill=(255, 255, 255))
+    d.text((x + 6, y + h - 16), "82,500 MARCH", font=F_TAG,
+           fill=(255, 255, 255))
+
+
 # ------------------------------------------------------------------- stories
 # Every story happened or was first reported on Saturday 21 November 2026.
 # Sources in brackets are the verifying outlets (see README for the full list).
@@ -725,9 +800,9 @@ LEADS = [
          src="Reuters; AP; IGP Peru", ill=ill_quake, lon=-75.5, lat=-11.0),
     dict(num=2, region="AMERICAS", beat="POLITICS", label="CONFIRMED",
          head="Mamdani: Rikers to close by 2032",
-         body="New York mayor unveils plan to shut the jail complex and "
-              "replace it with four borough jails \u2014 five years past the "
-              "legal deadline.",
+         body="Mayor unveils plan to shut the jail complex and replace it "
+              "with four borough jails \u2014 five years past the legal "
+              "deadline.",
          src="The Daily Short; LAS News", ill=ill_rikers, lon=-73.87,
          lat=40.79),
     dict(num=3, region="MIDDLE EAST", beat="GULF WAR", label="CLAIM",
@@ -737,17 +812,17 @@ LEADS = [
          src="Reuters; Al Jazeera; MEE", ill=ill_riyadh, lon=46.68,
          lat=24.71),
     dict(num=4, region="GLOBAL", beat="MARKETS", label="CONFIRMED",
-         head="Bitcoin crashes below its 2026 low",
-         body="BTC falls to $57,135, down nearly 8% on the day; Ether "
-              "-7.8%, total crypto market -7.6% in 24 hours.",
-         src="Finnhub; Coinbell", ill=ill_btc, lon=0.0, lat=0.0),
+         head="Bitcoin plunges to $55,130, then roars back to $60,000",
+         body="Two-year low in the morning, a 9% rebound by the afternoon; "
+              "$1.8bn in leveraged positions liquidated in 24 hours.",
+         src="CoinDesk; Finnhub; CoinStats", ill=ill_btc, lon=0.0, lat=0.0),
 ]
 
 MEDIUMS = [
     dict(num=5, region="OCEANIA", beat="CRICKET",
-         head="Rahul's 100 completes the SENA set",
-         body="First Indian opener with Test tons in all four SENA nations. "
-              "India 344/2 at tea, day 3 in Wellington.",
+         head="Rahul's 136 puts India on top, day 3",
+         body="India 486/4 at stumps in Wellington, leading by 118; all "
+              "five top-order batters pass 50.",
          ill=ill_cricket, lon=174.78, lat=-41.29),
     dict(num=6, region="AMERICAS", beat="MOTORSPORT",
          head="Russell fastest in Vegas FP3; clash with Verstappen",
@@ -756,8 +831,8 @@ MEDIUMS = [
          ill=ill_f1, lon=-115.14, lat=36.17),
     dict(num=7, region="AMERICAS", beat="BASKETBALL",
          head="Harden's 51 lifts Cavs; passes Kobe",
-         body="26th career 50-point game moves him to third all-time. "
-              "Cleveland beats Indiana 128-119 in NBA Cup.",
+         body="26th career 50-point game, third all-time; Cavs beat "
+              "Pacers 128-119 in NBA Cup.",
          ill=ill_basketball, lon=-81.69, lat=41.50),
     dict(num=8, region="ASIA", beat="POLITICS",
          head="Modi tours 3 states in a day",
@@ -771,52 +846,136 @@ MEDIUMS = [
          ill=ill_nepal, lon=77.21, lat=28.61),
     dict(num=10, region="AMERICAS", beat="BASKETBALL",
          head="Wizards stun Bulls 98-94 in NBA Cup",
-         body="Davis 36 points, 11 rebounds; rookie Dybantsa adds 20-10-6. "
-              "Washington now 2-1 in group play.",
+         body="Davis 36 points, 11 rebounds; rookie Dybantsa 20-10-6. "
+              "Wizards now 2-1 in group play.",
          ill=ill_basketball, lon=-87.63, lat=41.88),
+    dict(num=16, region="MIDDLE EAST", beat="GULF WAR", label="CLAIM",
+         head="Two tankers hit in Strait of Hormuz",
+         body="Two outbound tankers struck near Khasab, Oman; Iran's mine "
+              "claim is unverified.",
+         ill=ill_hormuz, lon=56.25, lat=26.18),
+    dict(num=17, region="EUROPE", beat="BALTIC", label="CLAIM",
+         head="Russian cargo ship hit by drones in Baltic",
+         body="Sparta II ablaze off Finland after drone strikes; Finland "
+              "blames Ukraine \u2014 unconfirmed.",
+         ill=ill_sparta, lon=27.0, lat=60.0),
+    dict(num=18, region="AMERICAS", beat="CARTELS",
+         head="Mexico captures 'El Chapo Isidro'",
+         body="FBI Top 10 fugitive seized in Sinaloa; 11 killed in the "
+              "violence that followed the arrest.",
+         ill=ill_cartel, lon=-107.4, lat=24.8),
+    dict(num=19, region="AMERICAS", beat="MOTORSPORT",
+         head="Antonelli fastest, but Verstappen inherits pole",
+         body="Antonelli laps 1:33.893 in Vegas Q3, then takes a 5-place "
+              "grid drop; Russell P2, Norris P3.",
+         ill=ill_f1q, lon=-113.8, lat=35.5),
+    dict(num=20, region="EUROPE", beat="TENNIS",
+         head="Alcaraz and Zverev set up ATP final",
+         body="Alcaraz beats Shelton 3-6, 6-3, 7-6(1); Zverev beats "
+              "Medvedev 7-6(0), 6-4 in Turin.",
+         ill=ill_tennis, lon=7.69, lat=45.07),
+    dict(num=21, region="EUROPE", beat="PROTESTS",
+         head="France protests shrink for a sixth Saturday",
+         body="82,500 march nationwide over living costs; 21,500 in Paris; "
+              "largely peaceful.",
+         ill=ill_protest, lon=2.35, lat=48.86),
 ]
 
-# (num, place, text, sub-line, lon, lat, region)
+# (num, place, text, lon, lat, region) — one line each, no sub-line.
 ALSO = [
     (11, "Atlanta", "Hawks beat Hornets 111-97; Johnson 26 in NBA Cup",
-     "Atlanta's third straight win; now 10-6 on the season",
      -84.39, 33.75, "AMERICAS"),
     (12, "Oklahoma City", "Thunder beat Pelicans 126-120 in NBA Cup",
-     "OKC improves to 10-6; New Orleans falls to 5-12",
      -97.52, 35.47, "AMERICAS"),
     (13, "Brooklyn", "Magic edge Nets 113-111, stay perfect in Cup group",
-     "Orlando 3-0 in group play, top of its group",
      -73.99, 40.69, "AMERICAS"),
     (14, "Detroit", "Raptors beat Pistons 105-102 in NBA Cup",
-     "Raptors now 6-10; Pistons fall to 10-5",
      -83.05, 42.33, "AMERICAS"),
     (15, "Sydney", "Hazlewood backs Cummins over captaincy row",
-     "Hints at rethinking his Test future if Cummins is stripped",
      151.21, -33.87, "OCEANIA"),
+    (22, "Washington", "FBI probes hack of its crime database",
+     -77.04, 38.90, "AMERICAS"),
+    (23, "Washington", "Trump vows 10% credit-card interest cap",
+     -77.04, 38.90, "AMERICAS"),
+    (24, "Washington", "Trump backs Bonds, Clemens for Hall of Fame",
+     -77.04, 38.90, "AMERICAS"),
+    (25, "Berlin", "Gen Z rallies turn violent at night",
+     13.41, 52.52, "EUROPE"),
+    (26, "Paris", "Depardieu, Houellebecq face sex probe",
+     2.35, 48.86, "EUROPE"),
+    (27, "Sydney", "NSW passes Mount Pleasant coal law",
+     150.89, -32.27, "OCEANIA"),
+    (28, "Sydney", "26 rallies over midwife insurance rule",
+     151.21, -33.87, "OCEANIA"),
+    (29, "Pago Pago", "Cyclone Xavier warning holds in Samoa",
+     -165.6, -11.9, "OCEANIA"),
+    (30, "Florida", "St. Johns River breaks 1953 flood record",
+     -80.74, 28.39, "AMERICAS"),
+    (31, "Goa", "Indian Panorama opens at IFFI, Dhurandhar",
+     73.83, 15.50, "ASIA"),
+    (32, "Salt Lake City", "Suns beat Jazz 111-101, Booker 23",
+     -111.89, 40.77, "AMERICAS"),
+    (33, "Denver", "Jokic leads Nuggets past Rockets 133-124",
+     -104.99, 39.74, "AMERICAS"),
+    (34, "Los Angeles", "Lakers edge Kings 106-104, Doncic 25",
+     -118.24, 34.05, "AMERICAS"),
+    (35, "Philadelphia", "Herro's 50 in vain as 76ers win 132-129",
+     -75.17, 39.95, "AMERICAS"),
+    (36, "Orlando", "UCF routs Iowa State 48-17; Toledo 19-0",
+     -81.38, 28.54, "AMERICAS"),
+    (37, "Durham", "Clemson, Oregon, Air Force, New Mexico win",
+     -78.90, 35.99, "AMERICAS"),
+    (38, "Lincoln", "Nebraska stuns No. 14 Ohio State 31-28",
+     -96.70, 40.81, "AMERICAS"),
+    (39, "Ann Arbor", "Michigan beats UCLA 18-16 in triple OT",
+     -83.74, 42.28, "AMERICAS"),
+    (40, "Lawrence", "No. 10 BYU survives Kansas 31-29 in 3OT",
+     -95.24, 38.97, "AMERICAS"),
+    (41, "Atlanta", "Wake Forest 50-29 Georgia Tech; Alabama 47-0",
+     -84.39, 33.75, "AMERICAS"),
+    (42, "London", "Leeds stun Chelsea 4-1; Arsenal held 2-2",
+     -0.12, 51.50, "EUROPE"),
+    (43, "Manchester", "City held 1-1 by Fulham; Bournemouth 2-0",
+     -2.24, 53.48, "EUROPE"),
+    (44, "Madrid", "Real Madrid 2-1 Celta; Malen scores 4 for Roma",
+     -3.70, 40.42, "EUROPE"),
+    (45, "Nice", "PSG win 3-2; Dou\u00e9 suffers serious knee injury",
+     7.27, 43.70, "EUROPE"),
+    (46, "London", "England rout All Blacks 37-12; France 45-17",
+     -0.34, 51.46, "EUROPE"),
+    (47, "Edinburgh", "Scotland hit Japan 67-5; Australia 29-26",
+     -3.19, 55.95, "EUROPE"),
+    (48, "Bhopal", "India beat South Korea 2-1 in hockey",
+     77.41, 23.26, "ASIA"),
+    (49, "Indore", "Anupama defends world snooker title 3-1",
+     75.86, 22.72, "ASIA"),
 ]
 
 TIMELINE = [
     ("00:01 UTC", "Mamdani: Rikers to close by 2032"),
-    ("00:30 UTC", "NBA Cup: six games tip off"),
     ("00:51 UTC", "3 missiles downed over Riyadh"),
     ("01:09 UTC", "M6.8 quake strikes Peru"),
-    ("01:30 UTC", "F1 FP3: Russell fastest"),
-    ("02:40 UTC", "Rahul's 100 completes SENA set"),
-    ("03:40 UTC", "Bitcoin below 2026 low"),
-    ("04:15 UTC", "Modi at IIT Kharagpur's 75th"),
+    ("04:00 UTC", "F1 qualifying: Antonelli fastest"),
+    ("05:00 UTC", "Two tankers hit off Oman"),
+    ("06:40 UTC", "Russian ship hit in Gulf of Finland"),
+    ("13:30 UTC", "India beat South Korea 2-1 in hockey"),
+    ("20:05 UTC", "Bitcoin retakes $60,000"),
 ]
 
-DATE_CHECK = ("Left out on purpose \u2014 they broke before today (all 20 Nov): "
-              "the Riemann proof claim, the Kyiv bridges missile blitz, "
-              "Wall Street's crash, Cyclone Akvan's landfall, GTA 6's "
-              "$3.79bn launch, Denmark's expulsion of a Russian diplomat, "
-              "F1's V8 return in 2030, Trump's pardon of Pete Rose.")
+DATE_CHECK = ("Left out on purpose \u2014 they broke before today: the "
+              "Riemann proof claim, the Kyiv bridges missile blitz, Wall "
+              "Street's crash, Cyclone Akvan's landfall, GTA 6's $3.79bn "
+              "launch, the UFO files batch (20 Nov), Sensex's Friday close, "
+              "Bayern 1-1 K\u00f6ln (20 Nov), PSG 5-0 Marseille (Sunday), "
+              "Pant's 128 (22 Nov), the IFFI opening (20 Nov), the "
+              "JPMorgan breach (19 Nov).")
 
 FOOTER_L = ("Every story here happened or was first reported on Saturday "
             "21 November 2026. CLAIM = one side's account, not independently "
             "confirmed.")
 FOOTER_R = ("Sources: Reuters, AP, Al Jazeera, IANS, ESPN, Sportradar, "
-            "Formula 1, FIA, Finnhub, PM India, The Daily Short. Original "
+            "Formula 1, FIA, Finnhub, CoinDesk, CNN, NCAA, USA Today, "
+            "Hockey India, PTI, PM India, The Daily Short. Original "
             "drawings.")
 
 MX = 14  # side margin
@@ -825,7 +984,7 @@ MX = 14  # side margin
 def draw_top(d):
     d.text((MX, 8), "ONE DAY OF WORLD NEWS, ONE PICTURE", font=F_TOP,
            fill=RED)
-    r = "15 STORIES  \u00b7  5 REGIONS  \u00b7  EVERY ONE FROM THIS SATURDAY"
+    r = "49 STORIES  \u00b7  6 REGIONS  \u00b7  EVERY ONE FROM THIS SATURDAY"
     d.text((W - MX - d.textlength(r, font=F_TOP_R), 8), r, font=F_TOP_R,
            fill=MUTED)
     d.line([(MX, 28), (W - MX, 28)], fill=RULE, width=1)
@@ -875,65 +1034,64 @@ def draw_lead(d, s, x, y, w):
 
 
 def draw_medium(d, s, x, y, w):
-    # 3-column layout: cards are ~326 px wide, so heads run 1-2 lines.
-    # Budget: ill 44 + tag 17 + head 2 lines (28) + body 3 lines (33)
-    # = 126 px, inside the 136 px row.
+    # 4-column layout: cards are ~243 px wide, rows are 108 px tall.
+    # Budget: ill 36 + tag 15 + head 2 lines (26) + body 2 lines (22)
+    # = 99 px, inside the 108 px row.
     col = REGION_COLORS[s["region"]]
-    s["ill"](d, x, y, w, 44)
-    d.rectangle([x, y, x + w, y + 44], outline=RULE, width=1)
-    ty = y + 47
+    s["ill"](d, x, y, w, 36)
+    d.rectangle([x, y, x + w, y + 36], outline=RULE, width=1)
+    ty = y + 39
     badge(d, x, ty, s["num"], col)
     tag = "%s \u00b7 %s" % (s["region"], s["beat"])
     d.text((x + 22, ty + 2), tag, font=F_TAG, fill=col)
-    hy = ty + 17
-    end = text_block(d, x, hy, s["head"], F_MED_H, w, INK, 14, max_lines=2)
+    lab = s.get("label")
+    if lab:
+        lw = d.textlength(lab, font=F_TAG)
+        d.rectangle([x + w - lw - 8, ty, x + w, ty + 15], outline=col,
+                    width=1)
+        d.text((x + w - lw - 4, ty + 2), lab, font=F_TAG, fill=col)
+    hy = ty + 16
+    end = text_block(d, x, hy, s["head"], F_MED_H, w, INK, 13, max_lines=2)
     text_block(d, x, end + 1, s["body"], F_MED_B, w, MUTED, 11,
-               max_lines=3)
+               max_lines=2)
 
 
 def draw_bottom(d):
-    y0 = 662
+    y0 = 720
     d.text((MX, y0), "WHERE IT HAPPENED", font=F_SEC, fill=RED)
-    d.text((430, y0), "ALSO ON SATURDAY 21 NOVEMBER", font=F_SEC, fill=RED)
+    d.text((346, y0), "ALSO ON SATURDAY 21 NOVEMBER", font=F_SEC, fill=RED)
     d.line([(MX, y0 + 16), (W - MX, y0 + 16)], fill=RULE, width=1)
-    # map (wider than 20 Nov: the Also list is short, so the map grows)
-    mbox = (MX, 682, 400, 180)
-    # Story 4 (Bitcoin) is global and has no pin.
+    # map (smaller than the 15-story build: the Also list is now long)
+    mbox = (MX, 742, 320, 148)
+    # Story 4 (Bitcoin) is global and has no pin. F1 qual (#19) is offset
+    # slightly from FP3 (#6) so the two Las Vegas pins do not overlap.
     pins = [(s["num"], s["lon"], s["lat"], REGION_COLORS[s["region"]])
             for s in LEADS + MEDIUMS if s["num"] != 4]
-    dots = [(a[4], a[5], REGION_COLORS[a[6]]) for a in ALSO]
+    dots = [(a[3], a[4], REGION_COLORS[a[5]]) for a in ALSO]
     draw_map(d, mbox, pins, dots)
-    ly = 868
-    d.text((MX, ly), "Pins: stories 1\u20133, 5\u201310  \u00b7  Dots: stories "
-           "11\u201315  \u00b7  Story 4 (Bitcoin) is global",
+    ly = 896
+    d.text((MX, ly), "Pins 1\u20133, 5\u201310, 16\u201321  \u00b7  Dots 11\u201315, "
+           "22\u201349", font=F_FOOT, fill=MUTED)
+    d.text((MX, ly + 12), "Americas 25  \u00b7  Europe 11  \u00b7  Asia 5",
            font=F_FOOT, fill=MUTED)
-    tally = ("Americas 9  \u00b7  Asia 2  \u00b7  Middle East 1  \u00b7  "
-             "Oceania 2  \u00b7  Global 1")
-    text_block(d, MX, ly + 14, tally, F_FOOT, 400, MUTED, 12, max_lines=2)
-    lx = MX
-    ly2 = 910
-    for name, col in [("Americas", REGION_COLORS["AMERICAS"]),
-                      ("Asia", REGION_COLORS["ASIA"]),
-                      ("Middle East", REGION_COLORS["MIDDLE EAST"]),
-                      ("Oceania", REGION_COLORS["OCEANIA"]),
-                      ("Global", REGION_COLORS["GLOBAL"])]:
-        d.ellipse([lx, ly2, lx + 8, ly2 + 8], fill=col)
-        d.text((lx + 11, ly2 - 2), name, font=F_FOOT, fill=MUTED)
-        lx += 11 + d.textlength(name, font=F_FOOT) + 12
-    # also list: single column, 5 items, each with a sub-line
-    cx, cw = 430, W - MX - 430
-    for ri, (num, place, text, sub, lon, lat, region) in enumerate(ALSO):
-        ry = 684 + ri * 46
-        col = REGION_COLORS[region]
-        badge(d, cx, ry, num, col)
-        full = "%s: %s" % (place, text)
-        text_block(d, cx + 22, ry + 1, full, F_ALSO, cw - 22, INK, 12,
-                   max_lines=1)
-        d.text((cx + 22, ry + 16), sub, font=F_ALSO_S, fill=MUTED)
+    d.text((MX, ly + 24), "Middle East 2  \u00b7  Oceania 5  \u00b7  Global 1 "
+           "(#4 Bitcoin)", font=F_FOOT, fill=MUTED)
+    # also list: two columns, 17 + 16 items, one line each
+    half = (len(ALSO) + 1) // 2
+    for ci, chunk in enumerate((ALSO[:half], ALSO[half:])):
+        cx = 346 + ci * 332
+        cw = 322
+        for ri, (num, place, text, lon, lat, region) in enumerate(chunk):
+            ry = 742 + ri * 11.5
+            col = REGION_COLORS[region]
+            pre = "%d. %s: " % (num, place)
+            d.text((cx, ry), pre, font=F_ALSO_NB, fill=col)
+            tx = cx + d.textlength(pre, font=F_ALSO_NB)
+            d.text((tx, ry), text, font=F_ALSO_S, fill=INK)
 
 
 def draw_datecheck(d):
-    y0 = 944
+    y0 = 940
     d.rectangle([MX, y0, W - MX, y0 + 46], outline=RED, width=1)
     d.rectangle([MX, y0, MX + 96, y0 + 46], fill=RED)
     d.text((MX + 8, y0 + 15), "DATE CHECK", font=F_DC_L, fill=(255, 255, 255))
@@ -942,7 +1100,7 @@ def draw_datecheck(d):
 
 
 def draw_footer(d):
-    y0 = 993
+    y0 = 992
     d.text((MX, y0), FOOTER_L, font=F_FOOT, fill=MUTED)
     d.text((MX, y0 + 13), FOOTER_R, font=F_FOOT, fill=MUTED)
 
@@ -954,18 +1112,17 @@ def build():
     draw_top(d)
     draw_masthead(d)
     draw_timeline(d)
-    # leads
+    # leads: 4 in one row
     lw = (W - 2 * MX - 3 * 10) // 4
     for i, s in enumerate(LEADS):
-        draw_lead(d, s, MX + i * (lw + 10), 148, lw)
-    d.line([(MX, 380), (W - MX, 380)], fill=RULE, width=1)
-    # mediums: 2 rows x 3 columns
-    mw = (W - 2 * MX - 2 * 8) // 3
-    for i, s in enumerate(MEDIUMS[:3]):
-        draw_medium(d, s, MX + i * (mw + 8), 386, mw)
-    for i, s in enumerate(MEDIUMS[3:]):
-        draw_medium(d, s, MX + i * (mw + 8), 522, mw)
-    d.line([(MX, 656), (W - MX, 656)], fill=RULE, width=1)
+        draw_lead(d, s, MX + i * (lw + 10), 140, lw)
+    d.line([(MX, 382), (W - MX, 382)], fill=RULE, width=1)
+    # mediums: 3 rows x 4 columns (12 cards)
+    mw = (W - 2 * MX - 3 * 8) // 4
+    for r in range(3):
+        for i, s in enumerate(MEDIUMS[r * 4:(r + 1) * 4]):
+            draw_medium(d, s, MX + i * (mw + 8), 388 + r * 108, mw)
+    d.line([(MX, 714), (W - MX, 714)], fill=RULE, width=1)
     draw_bottom(d)
     draw_datecheck(d)
     draw_footer(d)

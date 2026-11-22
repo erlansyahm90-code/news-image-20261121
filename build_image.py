@@ -29,86 +29,144 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FONT_DIR = "/usr/share/fonts/truetype/dejavu"
 
 W, H = 1024, 1024
-BG = (248, 243, 232)
-INK = (26, 26, 26)
-MUTED = (90, 84, 72)
-RULE = (60, 54, 44)
-RED = (163, 22, 33)
-PANEL = (255, 252, 244)
-MAP_BG = (214, 231, 240)
-LAND = (238, 226, 198)
-LAND_EDGE = (190, 175, 140)
 
-REGION_COLORS = {
-    "EUROPE": (31, 78, 121),
-    "MIDDLE EAST": (181, 101, 29),
-    "ASIA": (106, 44, 145),
-    "AMERICAS": (163, 22, 33),
-    "AFRICA": (30, 122, 52),
-    "OCEANIA": (14, 124, 123),
-    "GLOBAL": (60, 60, 60),
-    "SPORT": (123, 94, 0),
+# The poster's colour palette, spelled out as one table and unpacked into
+# the short names the drawing code uses. The values are the design's own;
+# only the spelling here is new.
+_PALETTE = {
+    "paper": (248, 243, 232),
+    "ink": (26, 26, 26),
+    "muted": (90, 84, 72),
+    "rule": (60, 54, 44),
+    "red": (163, 22, 33),
+    "panel": (255, 252, 244),
+    "sea": (214, 231, 240),
+    "land": (238, 226, 198),
+    "coast": (190, 175, 140),
 }
 
+BG = _PALETTE["paper"]
+INK = _PALETTE["ink"]
+MUTED = _PALETTE["muted"]
+RULE = _PALETTE["rule"]
+RED = _PALETTE["red"]
+PANEL = _PALETTE["panel"]
+MAP_BG = _PALETTE["sea"]
+LAND = _PALETTE["land"]
+LAND_EDGE = _PALETTE["coast"]
 
-def font(name, size):
-    return ImageFont.truetype(os.path.join(FONT_DIR, name), size)
+# Region tag colours, as (name, rgb) pairs in display order.
+_REGION_PAIRS = [
+    ("EUROPE", (31, 78, 121)),
+    ("MIDDLE EAST", (181, 101, 29)),
+    ("ASIA", (106, 44, 145)),
+    ("AMERICAS", (163, 22, 33)),
+    ("AFRICA", (30, 122, 52)),
+    ("OCEANIA", (14, 124, 123)),
+    ("GLOBAL", (60, 60, 60)),
+    ("SPORT", (123, 94, 0)),
+]
+
+REGION_COLORS = dict(_REGION_PAIRS)
 
 
-F_MAST = font("DejaVuSerif-Bold.ttf", 58)
-F_TOP = font("DejaVuSans-Bold.ttf", 11)
-F_TOP_R = font("DejaVuSans.ttf", 11)
-F_TL_TIME = font("DejaVuSans-Bold.ttf", 10)
-F_TL_EV = font("DejaVuSans.ttf", 10)
-F_TAG = font("DejaVuSans-Bold.ttf", 9)
-F_LEAD_H = font("DejaVuSerif-Bold.ttf", 19)
-F_LEAD_B = font("DejaVuSans.ttf", 11)
-F_MED_H = font("DejaVuSerif-Bold.ttf", 13)
-F_MED_B = font("DejaVuSans.ttf", 10)
-F_SEC = font("DejaVuSans-Bold.ttf", 11)
-F_ALSO = font("DejaVuSans.ttf", 10)
-F_ALSO_S = font("DejaVuSans.ttf", 9)
-F_ALSO_NB = font("DejaVuSans-Bold.ttf", 9)
-F_ALSO_B = font("DejaVuSans-Bold.ttf", 10)
-F_DC_L = font("DejaVuSans-Bold.ttf", 10)
-F_DC = font("DejaVuSans.ttf", 10)
-F_FOOT = font("DejaVuSans.ttf", 9)
-F_NUM = font("DejaVuSans-Bold.ttf", 9)
+def _load_font(filename, size):
+    path = os.path.join(FONT_DIR, filename)
+    return ImageFont.truetype(path, size)
+
+
+_SERIF_BOLD = "DejaVuSerif-Bold.ttf"
+_SANS = "DejaVuSans.ttf"
+_SANS_BOLD = "DejaVuSans-Bold.ttf"
+
+# (short key, font file, point size) for every type role on the poster.
+_FONT_SPECS = (
+    ("MAST", _SERIF_BOLD, 58),
+    ("TOP", _SANS_BOLD, 11),
+    ("TOP_R", _SANS, 11),
+    ("TL_TIME", _SANS_BOLD, 10),
+    ("TL_EV", _SANS, 10),
+    ("TAG", _SANS_BOLD, 9),
+    ("LEAD_H", _SERIF_BOLD, 19),
+    ("LEAD_B", _SANS, 11),
+    ("MED_H", _SERIF_BOLD, 13),
+    ("MED_B", _SANS, 10),
+    ("SEC", _SANS_BOLD, 11),
+    ("ALSO", _SANS, 10),
+    ("ALSO_S", _SANS, 9),
+    ("ALSO_NB", _SANS_BOLD, 9),
+    ("ALSO_B", _SANS_BOLD, 10),
+    ("DC_L", _SANS_BOLD, 10),
+    ("DC", _SANS, 10),
+    ("FOOT", _SANS, 9),
+    ("NUM", _SANS_BOLD, 9),
+)
+
+_LOADED = {}
+for _key, _fname, _pt in _FONT_SPECS:
+    _LOADED[_key] = _load_font(_fname, _pt)
+
+F_MAST = _LOADED["MAST"]
+F_TOP = _LOADED["TOP"]
+F_TOP_R = _LOADED["TOP_R"]
+F_TL_TIME = _LOADED["TL_TIME"]
+F_TL_EV = _LOADED["TL_EV"]
+F_TAG = _LOADED["TAG"]
+F_LEAD_H = _LOADED["LEAD_H"]
+F_LEAD_B = _LOADED["LEAD_B"]
+F_MED_H = _LOADED["MED_H"]
+F_MED_B = _LOADED["MED_B"]
+F_SEC = _LOADED["SEC"]
+F_ALSO = _LOADED["ALSO"]
+F_ALSO_S = _LOADED["ALSO_S"]
+F_ALSO_NB = _LOADED["ALSO_NB"]
+F_ALSO_B = _LOADED["ALSO_B"]
+F_DC_L = _LOADED["DC_L"]
+F_DC = _LOADED["DC"]
+F_FOOT = _LOADED["FOOT"]
+F_NUM = _LOADED["NUM"]
 
 
 def wrap(d, text, fnt, max_w):
-    words = text.split()
-    lines, cur = [], ""
-    for w in words:
-        t = (cur + " " + w).strip()
-        if d.textlength(t, font=fnt) <= max_w:
-            cur = t
+    """Greedy word wrap: pack as many words per line as fit in max_w."""
+    pieces = text.split()
+    fitted = []
+    current = ""
+    for piece in pieces:
+        candidate = piece if not current else current + " " + piece
+        if d.textlength(candidate, font=fnt) <= max_w:
+            current = candidate
         else:
-            if cur:
-                lines.append(cur)
-            cur = w
-    if cur:
-        lines.append(cur)
-    return lines
+            if current:
+                fitted.append(current)
+            current = piece
+    if current:
+        fitted.append(current)
+    return fitted
 
 
 def text_block(d, x, y, text, fnt, max_w, fill, leading, max_lines=None):
-    lines = wrap(d, text, fnt, max_w)
+    """Draw wrapped text starting at (x, y); return the y just below it."""
+    rows = wrap(d, text, fnt, max_w)
     if max_lines:
-        lines = lines[:max_lines]
-    for i, ln in enumerate(lines):
-        d.text((x, y + i * leading), ln, font=fnt, fill=fill)
-    return y + len(lines) * leading
+        rows = rows[:max_lines]
+    cursor = y
+    for row in rows:
+        d.text((x, cursor), row, font=fnt, fill=fill)
+        cursor += leading
+    return cursor
 
 
 def badge(d, x, y, num, color):
-    """Numbered circle badge, returns right edge."""
-    r = 8
-    d.ellipse([x, y, x + 2 * r, y + 2 * r], fill=color, outline=(255, 255, 255))
-    t = str(num)
-    tw = d.textlength(t, font=F_NUM)
-    d.text((x + r - tw / 2, y + 2.5), t, font=F_NUM, fill=(255, 255, 255))
-    return x + 2 * r + 4
+    """Draw a numbered disc at (x, y); return the x just past it."""
+    radius = 8
+    disc = [x, y, x + 2 * radius, y + 2 * radius]
+    d.ellipse(disc, fill=color, outline=(255, 255, 255))
+    label = str(num)
+    label_w = d.textlength(label, font=F_NUM)
+    text_x = x + radius - label_w / 2
+    d.text((text_x, y + 2.5), label, font=F_NUM, fill=(255, 255, 255))
+    return x + 2 * radius + 4
 
 
 # ---------------------------------------------------------------- world map
@@ -183,58 +241,79 @@ CONTINENTS = [
 
 
 def project(lon, lat, box):
-    x0, y0, w, h = box
-    x = x0 + (lon + 180.0) / 360.0 * w
-    y = y0 + (90.0 - lat) / 180.0 * h
-    return (x, y)
+    """Equirectangular projection of (lon, lat) into the map box."""
+    left, top, width, height = box
+    frac_x = (lon + 180.0) / 360.0
+    frac_y = (90.0 - lat) / 180.0
+    return (left + frac_x * width, top + frac_y * height)
 
 
 def draw_map(d, box, pins, dots):
-    """pins: list of (num, lon, lat, color). dots: list of (lon, lat, color)."""
-    x0, y0, w, h = box
-    d.rectangle([x0, y0, x0 + w, y0 + h], fill=MAP_BG,
-                outline=RULE, width=1)
-    for poly in CONTINENTS:
-        pts = [project(lon, lat, box) for lon, lat in poly]
-        d.polygon(pts, fill=LAND, outline=LAND_EDGE)
+    """Paint the world map: sea, continents, then dots, then numbered pins.
+
+    pins are (num, lon, lat, color); dots are (lon, lat, color).
+    """
+    left, top, width, height = box
+    frame = [left, top, left + width, top + height]
+    d.rectangle(frame, fill=MAP_BG, outline=RULE, width=1)
+    for continent in CONTINENTS:
+        outline = [project(lon, lat, box) for lon, lat in continent]
+        d.polygon(outline, fill=LAND, outline=LAND_EDGE)
     for lon, lat, color in dots:
-        px, py = project(lon, lat, box)
-        d.ellipse([px - 2.5, py - 2.5, px + 2.5, py + 2.5],
-                  fill=color, outline=(255, 255, 255))
+        dot_x, dot_y = project(lon, lat, box)
+        spot = [dot_x - 2.5, dot_y - 2.5, dot_x + 2.5, dot_y + 2.5]
+        d.ellipse(spot, fill=color, outline=(255, 255, 255))
     for num, lon, lat, color in pins:
-        px, py = project(lon, lat, box)
-        r = 7
-        d.ellipse([px - r, py - r, px + r, py + r], fill=color,
-                  outline=(255, 255, 255), width=1)
-        t = str(num)
-        tw = d.textlength(t, font=F_NUM)
-        d.text((px - tw / 2, py - 6), t, font=F_NUM, fill=(255, 255, 255))
+        pin_x, pin_y = project(lon, lat, box)
+        radius = 7
+        disc = [pin_x - radius, pin_y - radius,
+                pin_x + radius, pin_y + radius]
+        d.ellipse(disc, fill=color, outline=(255, 255, 255), width=1)
+        label = str(num)
+        label_w = d.textlength(label, font=F_NUM)
+        d.text((pin_x - label_w / 2, pin_y - 6), label, font=F_NUM,
+               fill=(255, 255, 255))
 
 
 # ------------------------------------------------------------- illustrations
 def _sky(d, x, y, w, h, top, bot):
-    for i in range(h):
-        t = i / max(1, h - 1)
-        c = tuple(int(top[k] + (bot[k] - top[k]) * t) for k in range(3))
-        d.line([(x, y + i), (x + w, y + i)], fill=c)
+    """Vertical gradient: one horizontal line per row, top colour to bottom."""
+    span = max(1, h - 1)
+    for row in range(h):
+        blend = row / span
+        shade = tuple(
+            int(top[channel] + (bot[channel] - top[channel]) * blend)
+            for channel in range(3)
+        )
+        d.line([(x, y + row), (x + w, y + row)], fill=shade)
 
 
 def _burst(d, cx, cy, r, color=(255, 140, 0), core=(255, 230, 120)):
+    """Starburst: 16 alternating long/short spikes around a bright core."""
     import math
-    pts = []
-    for i in range(16):
-        ang = math.pi * i / 8
-        rr = r if i % 2 == 0 else r * 0.45
-        pts.append((cx + rr * math.cos(ang), cy + rr * 0.8 * math.sin(ang)))
-    d.polygon(pts, fill=color)
-    d.ellipse([cx - r * 0.35, cy - r * 0.3, cx + r * 0.35, cy + r * 0.3],
-              fill=core)
+
+    def spike(index):
+        angle = math.pi * index / 8
+        reach = r if index % 2 == 0 else r * 0.45
+        return (cx + reach * math.cos(angle),
+                cy + reach * 0.8 * math.sin(angle))
+
+    star = [spike(i) for i in range(16)]
+    d.polygon(star, fill=color)
+    core_box = [cx - r * 0.35, cy - r * 0.3, cx + r * 0.35, cy + r * 0.3]
+    d.ellipse(core_box, fill=core)
 
 
 def _smoke(d, cx, cy, s, color=(120, 120, 120)):
-    for dx, dy, r in [(0, 0, 9), (8, -6, 7), (-8, -5, 6), (3, -12, 6)]:
-        d.ellipse([cx + dx * s - r * s, cy + dy * s - r * s,
-                   cx + dx * s + r * s, cy + dy * s + r * s], fill=color)
+    """Cluster of four overlapping puffs, scaled by s."""
+    puffs = ((0, 0, 9), (8, -6, 7), (-8, -5, 6), (3, -12, 6))
+    for off_x, off_y, puff_r in puffs:
+        centre_x = cx + off_x * s
+        centre_y = cy + off_y * s
+        spread = puff_r * s
+        puff = [centre_x - spread, centre_y - spread,
+                centre_x + spread, centre_y + spread]
+        d.ellipse(puff, fill=color)
 
 
 def ill_kyiv(d, x, y, w, h):
